@@ -4,6 +4,8 @@ use std::io::{Cursor, Read, Seek, SeekFrom, Write};
 use std::mem::replace;
 use std::net::SocketAddr;
 use std::str::from_utf8;
+use std::thread::sleep;
+use std::time::Duration;
 
 use mio::tcp::TcpStream;
 use mio::{Ready, Token};
@@ -509,6 +511,7 @@ where
                     }
                 }
                 Client(_) => {
+                    sleep(Duration::from_millis(100));
                     if self.socket.try_write_buf(req)?.is_some() {
                         if req.position() as usize == req.get_ref().len() {
                             trace!(
